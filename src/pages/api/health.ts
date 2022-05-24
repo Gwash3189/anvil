@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { Controller, install } from 'nextjs-backend-helpers'
+import type {NextApiRequest, NextApiResponse} from 'next'
+import {Controller, install} from 'nextjs-backend-helpers'
 
 export class HealthController extends Controller {
-  get(req: NextApiRequest, res: NextApiResponse) {
-    return res.json({
-      alive: true
-    })
+  get(request: NextApiRequest, response: NextApiResponse) {
+    response.json({
+      alive: true,
+    });
   }
 }
 
