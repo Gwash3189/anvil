@@ -32,7 +32,8 @@ async function createFlags(items = []) {
   })).fill(0)
   .map(() => {
     return {
-      active: faker.datatype.boolean()
+      active: faker.datatype.boolean(),
+      name: faker.name.jobTitle()
     }
   }).map(async (flag) => {
     const itemId = items[faker.datatype.number({ min: 0, max: items.length - 1 })].id
@@ -40,6 +41,7 @@ async function createFlags(items = []) {
     return await client.flag.create({
       data: {
         active: flag.active,
+        name: flag.name,
         items: {
           connect: {
             id: itemId

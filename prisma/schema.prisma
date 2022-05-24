@@ -12,6 +12,7 @@ datasource db {
 
 model Flag {
   id       String    @id @default(uuid())
+  name     String    @unique()
   active   Boolean
   items    Item[]
   webhooks Webhook[]
@@ -22,7 +23,7 @@ model Flag {
 
 model Item {
   id       String    @id @default(uuid())
-  name     String
+  name     String    @unique()
   flag     Flag[]
   webhooks Webhook[]
 
