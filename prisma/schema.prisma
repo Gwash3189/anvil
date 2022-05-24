@@ -38,7 +38,7 @@ model Webhook {
   flagId String
   itemId String
 
-  lastSent  DateTime @default(now())
+  lastSent  DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
