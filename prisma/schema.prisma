@@ -11,9 +11,9 @@ datasource db {
 }
 
 model Flag {
-  id     String  @id @default(uuid())
-  active Boolean
-  items  Item[]
+  id       String    @id @default(uuid())
+  active   Boolean
+  items    Item[]
   webhooks Webhook[]
 
   createdAt DateTime @default(now())
@@ -21,20 +21,19 @@ model Flag {
 }
 
 model Item {
-  id   String @id @default(uuid())
-  name String
-  flag Flag[]
+  id       String    @id @default(uuid())
+  name     String
+  flag     Flag[]
   webhooks Webhook[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
 
-
 model Webhook {
   id   String @id @default(uuid())
-  flag Flag @relation(fields: [flagId], references: [id])
-  item Item @relation(fields: [itemId], references: [id])
+  flag Flag   @relation(fields: [flagId], references: [id])
+  item Item   @relation(fields: [itemId], references: [id])
 
   flagId String
   itemId String
