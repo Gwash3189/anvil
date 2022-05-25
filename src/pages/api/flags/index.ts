@@ -1,5 +1,5 @@
 import {Flag} from '@prisma/client'
-import {string, object, boolean, InferType, ValidationError} from 'yup'
+import {string, object, boolean, ValidationError} from 'yup'
 import type {NextApiRequest, NextApiResponse} from 'next'
 import {
   Controller,
@@ -13,13 +13,6 @@ import {FlagRepository} from '../../../repositories/flag-repository'
 type FindByNameQuery = {
   name: string
 }
-
-type NewFlagPostBody = {
-  name: string,
-  active: boolean
-}
-
-type NewFlagBody = InferType<typeof FlagController.newFlagSchema>
 
 export class FlagController extends Controller {
   static newFlagSchema = object({
@@ -59,77 +52,37 @@ export class FlagController extends Controller {
   }
 
   async post(request: NextApiRequest, response: NextApiResponse) {
-    const value = await Try
-      .of(async () => FlagController
+    try {
+      const {name, active} = await FlagController
         .newFlagSchema
         .validate(request.body)
-      )
 
-    await value.left((error: any) => {
-      response.status(400).json({
-        errors: error.errors,
-      })
-    })
-
-    await value.right(async (body: Promise<NewFlagBody>) => {
-      const result = await Try<Promise<Flag>, Error>(async () => {
-        const { name, active } = await body
-
-        return Repositorys.find(FlagRepository).create({
-          name: name,
-          active: active,
-        }) as Promise<Flag>
+      const flag = await Repositorys.find(FlagRepository).create({
+        name,
+        active,
       })
 
-      result.right(async (flag: Promise<Flag>) => {
-        response.json({
-          data: {
-            flag: await flag,
-          },
+      response.json({
+        data: {
+          flag,
+        },
+      })
+
+      return
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) {
+        response.status(400).json({
+          errors: error.errors,
         })
-      })
 
-      result.left((error: Error) => {
-        response.status(500).json({
-          errors: [error.message]
-        })
+        return
+      }
+
+      response.status(500).json({
+        errors: [(error as Error).message],
       })
-    })
+    }
   }
 }
 
 export default install(FlagController)
-
-class Try {
-  public error
-  public value
-
-  static async of(func: Function) {
-    return new Try(await func())
-  }
-
-  constructor(value?: Awaited<any>, error?: Error) {
-    this.value = value || null
-    this.error = error || null
-  }
-
-  static async left (func: () => Awaited<any>) {
-    return Try.of(() => func())
-  }
-
-  async left(func: (value: Error) => Awaited<any>) {
-    const awaitedError = await this.error
-
-    if(awaitedError) {
-      return Try.of(() => func(awaitedError))
-    }
-  }
-
-  async right(func: (value: Awaited<any>) => Awaited<any>) {
-    const awaitedValue = await this.value
-
-    if(awaitedValue) {
-      return Try.of(() => func(awaitedValue))
-    }
-  }
-}

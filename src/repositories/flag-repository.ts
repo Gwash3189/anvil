@@ -24,9 +24,9 @@ Flag
     return this.queryMany(async flag => flag.findMany({
       where: {
         name: {
-          contains: name
-        }
-      }
+          contains: name,
+        },
+      },
     }))
   }
 }
