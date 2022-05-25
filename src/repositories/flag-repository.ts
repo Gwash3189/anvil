@@ -21,10 +21,12 @@ Flag
   }
 
   async findByName({name}: {name: string}) {
-    return this.querySingle(async flag => flag.findUnique({
+    return this.queryMany(async flag => flag.findMany({
       where: {
-        name,
-      },
+        name: {
+          contains: name
+        }
+      }
     }))
   }
 }

@@ -25,13 +25,13 @@ export class FlagController extends Controller {
     let flags: Flag[] = []
 
     if (name) {
-      const flag = await Repositorys.find(FlagRepository).findByName({name})
+      flags = await Repositorys.find(FlagRepository).findByName({name})
 
       response.json({
         data: {
-          flags: [flag],
+          flags,
         },
-      });
+      })
 
       return;
     }
