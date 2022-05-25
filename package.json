@@ -22,11 +22,17 @@
       "import/extensions": 0,
       "unicorn/no-array-callback-reference": 0,
       "@typescript-eslint/member-delimiter-style": 0,
-      "max-len": ["error", { "code": 80 }]
+      "max-len": [
+        "error",
+        {
+          "code": 80
+        }
+      ]
     }
   },
   "dependencies": {
     "@prisma/client": "^3.14.0",
+    "@sniptt/monads": "^0.5.10",
     "next": "12.1.6",
     "nextjs-backend-helpers": "^0.0.10-1",
     "react": "18.1.0",
