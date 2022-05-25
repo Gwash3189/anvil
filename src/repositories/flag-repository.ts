@@ -20,13 +20,15 @@ Flag
     }))
   }
 
-  async findByName({name}: {name: string}) {
+  async findByName({name, page = 0}: {name: string, page?: number}) {
     return this.queryMany(async flag => flag.findMany({
       where: {
         name: {
           contains: name,
         },
       },
+      take: 30,
+      skip: page * 30
     }))
   }
 }
