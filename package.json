@@ -28,7 +28,7 @@
   "dependencies": {
     "@prisma/client": "^3.14.0",
     "next": "12.1.6",
-    "nextjs-backend-helpers": "^0.0.7",
+    "nextjs-backend-helpers": "^0.0.10-1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "yup": "^0.32.11"
