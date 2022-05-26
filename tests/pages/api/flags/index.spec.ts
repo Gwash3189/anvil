@@ -66,7 +66,7 @@ describe('FlagController', () => {
         )
           .mock.calls[0] as Array<Record<string, string>>
 
-        expect(mockCalls).to.deep.equal([{name: 'A name'}])
+        expect(mockCalls).to.deep.equal([{name: 'A name', page: 1}])
       })
     })
   })
