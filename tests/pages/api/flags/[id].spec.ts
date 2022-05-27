@@ -1,33 +1,67 @@
 import {expect} from 'chai'
 
-import {get, Repositorys, RequestBuilder} from 'nextjs-backend-helpers'
+import {get, patch, post, Repositorys, RequestBuilder} from 'nextjs-backend-helpers'
 import {Flag} from '@prisma/client'
 import {FlagIdController} from '../../../../src/pages/api/flags/[id]'
 import {FlagRepository} from '../../../../src/repositories/flag-repository'
 
 describe('FlagIdController', () => {
-  let flag: Flag
+  let flag: Partial<Flag>
 
-  beforeEach(() => {
-    flag = {
-      active: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      id: '123',
-      name: 'A name',
-    }
+  describe('#get', () => {
+    beforeEach(() => {
+      flag = {
+        active: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        id: '123',
+        name: 'A name',
+      }
 
-    Repositorys.find(FlagRepository).mock('findById', jest.fn(() => flag))
+      Repositorys.find(FlagRepository).mock('findById', jest.fn(() => flag))
+    })
+
+    it('returns the found flag', async () => {
+      const response = await get(
+        FlagIdController,
+        new RequestBuilder().query({id: '123'}),
+      )
+
+      expect(response.json).to.deep.equal({
+        data: {flag},
+      })
+    })
   })
 
-  it('returns the found flag', async () => {
-    const response = await get(
-      FlagIdController,
-      new RequestBuilder().query({id: '123'}),
-    )
+  describe('#patch', () => {
+    let request, response
 
-    expect(response.json).to.deep.equal({
-      data: {flag},
+    beforeEach(async () => {
+      flag = {
+        name: 'A name',
+        active: true
+      }
+      request = new RequestBuilder()
+        .query({
+          id: '123'
+        })
+        .body(flag)
+      Repositorys.find(FlagRepository).mock('update', jest.fn(() => ({...flag, id: '123'})))
+      response = await patch(FlagIdController, request)
+    })
+
+    afterEach(() => {
+      Repositorys.find(FlagRepository).reset('update')
+    })
+
+    it('updates the flag', () => {
+      expect(response.json).to.deep.equal({
+        data: {
+          id: '123',
+          active: true,
+          name: 'A name'
+        }
+      })
     })
   })
 })

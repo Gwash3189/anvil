@@ -1,5 +1,5 @@
 import {Flag} from '@prisma/client'
-import {string, object, boolean, ValidationError} from 'yup'
+import {ValidationError} from 'yup'
 import type {NextApiRequest, NextApiResponse} from 'next'
 import {
   Controller,
@@ -9,21 +9,13 @@ import {
   Repositorys,
 } from 'nextjs-backend-helpers'
 import {FlagRepository} from '../../../repositories/flag-repository'
+import { newFlagSchema } from '../../../schemas/flags'
 
 type FindByNameQuery = {
   name: string
 }
 
 export class FlagController extends Controller {
-  static newFlagSchema = object({
-    name: string()
-      .required('A new flag requires a name'),
-    active: boolean()
-      .required(
-        'A new flag needs an active state. It can be either true or false.',
-      ),
-  })
-
   async get(request: NextApiRequest, response: NextApiResponse) {
     const page = getPageFromQuery(request)
     const {name} = getQuery<FindByNameQuery>(request)
@@ -53,8 +45,7 @@ export class FlagController extends Controller {
 
   async post(request: NextApiRequest, response: NextApiResponse) {
     try {
-      const {name, active} = await FlagController
-        .newFlagSchema
+      const {name, active} = await newFlagSchema
         .validate(request.body)
 
       const flag = await Repositorys.find(FlagRepository).create({

@@ -5,7 +5,9 @@ import {
   install,
   Repositorys,
 } from 'nextjs-backend-helpers'
+import { ValidationError } from 'yup'
 import {FlagRepository} from '../../../repositories/flag-repository'
+import { flagSchema } from '../../../schemas/flags'
 
 type FlagIdQuery = {
   id: string
@@ -23,6 +25,38 @@ export class FlagIdController extends Controller {
         flag,
       },
     });
+  }
+
+  async patch(request: NextApiRequest, response: NextApiResponse) {
+    try {
+      const {id} = getQuery<FlagIdQuery>(request)
+      const {name, active} = await flagSchema
+        .validate(request.body)
+
+        const flag = await Repositorys.find(FlagRepository).update({
+          id,
+          name,
+          active,
+        })
+
+      response.json({
+        data: flag,
+      })
+
+      return
+    } catch (error: unknown) {
+      if (error instanceof ValidationError) {
+        response.status(400).json({
+          errors: error.errors,
+        })
+
+        return
+      }
+
+      response.status(500).json({
+        errors: [(error as Error).message],
+      })
+    }
   }
 }
 
