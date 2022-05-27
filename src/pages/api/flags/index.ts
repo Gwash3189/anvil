@@ -16,6 +16,22 @@ type FindByNameQuery = {
 }
 
 export class FlagController extends Controller {
+  constructor() {
+    super()
+
+    this.rescue(ValidationError, (error, _request, response) => {
+      response.status(400).json({
+        errors: error.errors,
+      })
+    })
+
+    this.rescue(Error, (error, _request, response) => {
+      response.status(500).json({
+        errors: [(error as Error).message],
+      })
+    })
+  }
+
   async get(request: NextApiRequest, response: NextApiResponse) {
     const page = getPageFromQuery(request)
     const {name} = getQuery<FindByNameQuery>(request)
