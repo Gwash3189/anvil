@@ -9,7 +9,7 @@ import {
   Repositorys,
 } from 'nextjs-backend-helpers'
 import {FlagRepository} from '../../../repositories/flag-repository'
-import { newFlagSchema } from '../../../schemas/flags'
+import {newFlagSchema} from '../../../schemas/flags'
 
 type FindByNameQuery = {
   name: string
@@ -27,7 +27,7 @@ export class FlagController extends Controller {
 
     this.rescue(Error, (error, _request, response) => {
       response.status(500).json({
-        errors: [(error as Error).message],
+        errors: [(error).message],
       })
     })
   }
@@ -60,35 +60,19 @@ export class FlagController extends Controller {
   }
 
   async post(request: NextApiRequest, response: NextApiResponse) {
-    try {
-      const {name, active} = await newFlagSchema
-        .validate(request.body)
+    const {name, active} = await newFlagSchema
+      .validate(request.body)
 
-      const flag = await Repositorys.find(FlagRepository).create({
-        name,
-        active,
-      })
+    const flag = await Repositorys.find(FlagRepository).create({
+      name,
+      active,
+    })
 
-      response.json({
-        data: {
-          flag,
-        },
-      })
-
-      return
-    } catch (error: unknown) {
-      if (error instanceof ValidationError) {
-        response.status(400).json({
-          errors: error.errors,
-        })
-
-        return
-      }
-
-      response.status(500).json({
-        errors: [(error as Error).message],
-      })
-    }
+    response.json({
+      data: {
+        flag,
+      },
+    })
   }
 }
 

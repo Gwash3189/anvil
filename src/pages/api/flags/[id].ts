@@ -5,9 +5,9 @@ import {
   install,
   Repositorys,
 } from 'nextjs-backend-helpers'
-import { ValidationError } from 'yup'
+import {ValidationError} from 'yup'
 import {FlagRepository} from '../../../repositories/flag-repository'
-import { flagSchema } from '../../../schemas/flags'
+import {flagSchema} from '../../../schemas/flags'
 
 type FlagIdQuery = {
   id: string
@@ -33,11 +33,11 @@ export class FlagIdController extends Controller {
       const {name, active} = await flagSchema
         .validate(request.body)
 
-        const flag = await Repositorys.find(FlagRepository).update({
-          id,
-          name,
-          active,
-        })
+      const flag = await Repositorys.find(FlagRepository).update({
+        id,
+        name,
+        active,
+      })
 
       response.json({
         data: flag,
