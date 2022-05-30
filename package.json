@@ -34,7 +34,7 @@
     "@prisma/client": "^3.14.0",
     "@sniptt/monads": "^0.5.10",
     "next": "12.1.6",
-    "nextjs-backend-helpers": "^0.0.10-2",
+    "nextjs-backend-helpers": "^0.0.10-3",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "yup": "^0.32.11"
