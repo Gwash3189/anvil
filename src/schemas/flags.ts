@@ -1,8 +1,8 @@
-import { boolean, object, string } from "yup"
+import {boolean, object, string} from 'yup'
 
 export const flagSchema = object({
   name: string(),
-  active: boolean()
+  active: boolean(),
 })
 export const newFlagSchema = object({
   name: string()
