@@ -8,9 +8,9 @@ import {
   ResponseType,
 } from 'nextjs-backend-helpers'
 import {Flag} from '@prisma/client'
+import {ValidationError} from 'yup'
 import {FlagRepository} from '../../../../src/repositories/flag-repository'
 import {FlagController} from '../../../../src/pages/api/flags'
-import { ValidationError } from 'yup'
 
 describe('FlagController', () => {
   let flag: Flag
@@ -74,12 +74,12 @@ describe('FlagController', () => {
   })
 
   describe('#post', () => {
-    let request, response, flag
+    let request; let response; let flag
 
     beforeEach(async () => {
       flag = {
         name: 'a name',
-        active: true
+        active: true,
       }
       request = new RequestBuilder().body(flag)
       Repositorys.find(FlagRepository).mock('create', jest.fn(() => flag))
@@ -94,22 +94,22 @@ describe('FlagController', () => {
       const mock = (Repositorys.find(FlagRepository).create) as jest.Mock
       expect(mock.mock.calls[0][0]).to.deep.equal({
         active: true,
-        name: 'a name'
+        name: 'a name',
       })
     })
 
     it('sends the flag back in a response', () => {
       expect(response.json).to.deep.equal({
         data: {
-          flag
-        }
+          flag,
+        },
       })
     })
 
     describe('when the post request has incorrect parameters', () => {
       beforeEach(async () => {
         flag = {
-          active: 'true'
+          active: 'true',
         }
         request = new RequestBuilder().body(flag)
         Repositorys.find(FlagRepository).mock('create', jest.fn(() => {
@@ -128,7 +128,7 @@ describe('FlagController', () => {
 
       it('includes the error in the response', () => {
         expect(response.json).to.deep.equal({
-          errors: ['A new flag requires a name']
+          errors: ['A new flag requires a name'],
         })
       })
     })
@@ -137,7 +137,7 @@ describe('FlagController', () => {
       beforeEach(async () => {
         flag = {
           active: 'true',
-          name: 'A name'
+          name: 'A name',
         }
         request = new RequestBuilder().body(flag)
         Repositorys.find(FlagRepository).mock('create', jest.fn(() => {
@@ -152,7 +152,7 @@ describe('FlagController', () => {
 
       it('includes the error in the response', () => {
         expect(response.json).to.deep.equal({
-          errors: ['I can\'t talk to the database']
+          errors: ['I can\'t talk to the database'],
         })
       })
     })

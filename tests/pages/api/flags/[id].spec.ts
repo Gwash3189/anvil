@@ -34,16 +34,16 @@ describe('FlagIdController', () => {
   })
 
   describe('#patch', () => {
-    let request, response
+    let request; let response
 
     beforeEach(async () => {
       flag = {
         name: 'A name',
-        active: true
+        active: true,
       }
       request = new RequestBuilder()
         .query({
-          id: '123'
+          id: '123',
         })
         .body(flag)
       Repositorys.find(FlagRepository).mock('update', jest.fn(() => ({...flag, id: '123'})))
@@ -59,8 +59,8 @@ describe('FlagIdController', () => {
         data: {
           id: '123',
           active: true,
-          name: 'A name'
-        }
+          name: 'A name',
+        },
       })
     })
   })
