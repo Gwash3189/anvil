@@ -7,4 +7,4 @@ cd "$(dirname "$0")/.."
 echo "running setup"
 rm -rf node_modules && npm install
 echo "running database migrations and prisma generation"
-docker compose up -d && sleep 3 && npx prisma migrate dev
+docker compose up -d && sleep 3 && npx prisma migrate dev && docker compose down
