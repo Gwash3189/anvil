@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# script/test: Run test suite for application. Optionally pass in a path to an
+#              individual test file to run a single test.
+
+
+set -e
+echo "Running tests…"
+date "+%H:%M:%S"
+
+cd "$(dirname "$0")/.."
+if [ $# -eq 0 ]
+  then
+    npm run test
+  else
+    npx jest "$1"
+fi

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# script/bootstrap: Resolve all dependencies that the application requires to
+#                   run.
+set -e
+cd "$(dirname "$0")/.."
+echo "running setup"
+rm -rf node_modules && npm install
+echo "running database migrations and prisma generation"
+docker compose up -d && sleep 3 && npx prisma migrate dev
