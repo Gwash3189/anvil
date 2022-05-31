@@ -18,7 +18,7 @@ Flag
   }
 
   async create(
-    {name, active}: Pick<Prisma.FlagCreateInput, 'name' | 'active'>
+    {name, active}: Pick<Prisma.FlagCreateInput, 'name' | 'active'>,
   ) {
     return this.querySingle(async flag => flag.create({
       data: {

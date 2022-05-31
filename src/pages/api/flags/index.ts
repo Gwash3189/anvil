@@ -10,28 +10,13 @@ import {
 } from 'nextjs-backend-helpers'
 import {FlagRepository} from '../../../repositories/flag-repository'
 import {newFlagSchema} from '../../../schemas/flags'
+import {AppController} from '../../../controllers/application-controller'
 
 type FindByNameQuery = {
   name: string
 }
 
-export class FlagController extends Controller {
-  constructor() {
-    super()
-
-    this.rescue(ValidationError, (error, _request, response) => {
-      response.status(400).json({
-        errors: error.errors,
-      })
-    })
-
-    this.rescue(Error, (error, _request, response) => {
-      response.status(500).json({
-        errors: [(error).message],
-      })
-    })
-  }
-
+export class FlagController extends AppController {
   async get(request: NextApiRequest, response: NextApiResponse) {
     const page = getPageFromQuery(request)
     const {name} = getQuery<FindByNameQuery>(request)
