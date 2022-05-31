@@ -5,4 +5,4 @@
 set -e
 echo "running update"
 cd "$(dirname "$0")/.."
-./scripts/bootstrap && ./scripts/setup
+./scripts/bootstrap
